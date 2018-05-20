@@ -9,6 +9,12 @@ def check_word(word):
 
 
 def explain(word):
+    """
+    provides an explanation for a given word from the DICTIONARY.
+    :param word: string of the word
+    :return: explanation
+    """
+
     word = word.strip().lower()
 
     explanation = DICTIONARY.get(word, DICTIONARY.get(word.capitalize(), DICTIONARY.get(word.upper())))
