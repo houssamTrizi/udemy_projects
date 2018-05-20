@@ -1,5 +1,5 @@
 from open_street_map import DATA_VOLCANO, MAP_FILE_PATH, DATA_POPULATION
-from folium import Map, CircleMarker, FeatureGroup, GeoJson
+from folium import Map, CircleMarker, FeatureGroup, GeoJson, LayerControl
 
 
 def color_producer(elevation):
@@ -21,10 +21,12 @@ def main():
 
     map = Map(location=[33.99, -99.09], zoom_start=6, tiles="Mapbox Bright")
 
-    features = FeatureGroup(name="Volcanoes")
+    volcano_features = FeatureGroup(name="Volcanoes")
+
+    population_features = FeatureGroup(name="Population")
 
     for lat, lon, elev in zip(latitudes, longitudes, elevations):
-        features.add_child(CircleMarker(
+        volcano_features.add_child(CircleMarker(
             location=[lat, lon],
             popup="{} m".format(elev),
             fill_color=color_producer(elev),
@@ -33,14 +35,17 @@ def main():
             radius=6,
             fill=True
         ))
-    features.add_child(GeoJson(
+    population_features.add_child(GeoJson(
         DATA_POPULATION,
         style_function=lambda x: {"fillColor": "green" if x["properties"]["POP2005"] < 10000000
         else "orange" if x["properties"]["POP2005"] <= 20000000 else "red"}
     ))
 
-    map.add_child(features)
+    map.add_child(volcano_features)
 
+    map.add_child(population_features)
+
+    map.add_child(LayerControl())
     map.save(MAP_FILE_PATH)
 
 
