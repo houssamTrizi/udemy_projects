@@ -1,6 +1,18 @@
 from open_street_map import DATA, MAP_FILE_PATH
 from folium import Map, Marker, FeatureGroup, Icon
 
+def color_producer(elevation):
+
+    if elevation < 1000:
+        return "green"
+
+    elif  1000 <= elevation < 3000:
+        return "orange"
+
+    else:
+
+        return "red"
+
 
 def main():
     longitudes = DATA.LON
@@ -12,7 +24,7 @@ def main():
     features = FeatureGroup(name="Volcanoes")
 
     for lat, lon, elev in zip(latitudes, longitudes, elevations):
-        features.add_child(Marker(location=[lat, lon], popup="{} m".format(elev), icon=Icon(color="green")))
+        features.add_child(Marker(location=[lat, lon], popup="{} m".format(elev), icon=Icon(color=color_producer(elev))))
 
     map.add_child(features)
 
