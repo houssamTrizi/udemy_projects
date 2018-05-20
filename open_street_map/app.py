@@ -1,5 +1,6 @@
 from open_street_map import DATA, MAP_FILE_PATH
-from folium import Map, Marker, FeatureGroup, Icon
+from folium import Map, CircleMarker, FeatureGroup, Icon
+
 
 def color_producer(elevation):
 
@@ -24,7 +25,15 @@ def main():
     features = FeatureGroup(name="Volcanoes")
 
     for lat, lon, elev in zip(latitudes, longitudes, elevations):
-        features.add_child(Marker(location=[lat, lon], popup="{} m".format(elev), icon=Icon(color=color_producer(elev))))
+        features.add_child(CircleMarker(
+            location=[lat, lon],
+            popup="{} m".format(elev),
+            fill_color=color_producer(elev),
+            color="grey",
+            fill_opacity=0.7,
+            radius=6,
+            fill=True
+        ))
 
     map.add_child(features)
 
