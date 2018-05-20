@@ -1,13 +1,12 @@
-from open_street_map import DATA, MAP_FILE_PATH
-from folium import Map, CircleMarker, FeatureGroup, Icon
+from open_street_map import DATA_VOLCANO, MAP_FILE_PATH, DATA_POPULATION
+from folium import Map, CircleMarker, FeatureGroup, GeoJson
 
 
 def color_producer(elevation):
-
     if elevation < 1000:
         return "green"
 
-    elif  1000 <= elevation < 3000:
+    elif 1000 <= elevation < 3000:
         return "orange"
 
     else:
@@ -16,9 +15,9 @@ def color_producer(elevation):
 
 
 def main():
-    longitudes = DATA.LON
-    latitudes = DATA.LAT
-    elevations = DATA.ELEV
+    longitudes = DATA_VOLCANO.LON
+    latitudes = DATA_VOLCANO.LAT
+    elevations = DATA_VOLCANO.ELEV
 
     map = Map(location=[33.99, -99.09], zoom_start=6, tiles="Mapbox Bright")
 
@@ -34,6 +33,11 @@ def main():
             radius=6,
             fill=True
         ))
+    features.add_child(GeoJson(
+        DATA_POPULATION,
+        style_function=lambda x: {"fillColor": "green" if x["properties"]["POP2005"] < 10000000
+        else "orange" if x["properties"]["POP2005"] <= 20000000 else "red"}
+    ))
 
     map.add_child(features)
 
