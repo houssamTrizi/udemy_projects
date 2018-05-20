@@ -11,7 +11,7 @@ def check_word(word):
 def explain(word):
     word = word.strip().lower()
 
-    explanation = DICTIONARY.get(word, DICTIONARY.get(word.capitalize()))
+    explanation = DICTIONARY.get(word, DICTIONARY.get(word.capitalize(), DICTIONARY.get(word.upper())))
 
     if explanation:
         return "\n".join(explanation)
